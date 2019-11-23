@@ -77,7 +77,7 @@ public class MessageType {
     /**
      * 事件类型：CLICK(自定义菜单)
      */
-    public static final String EVENT_TYPE_CLICK = "click";
+    public static final String EVENT_TYPE_CLICK = "CLICK";
 
     /**
      * 响应消息类型：文本
