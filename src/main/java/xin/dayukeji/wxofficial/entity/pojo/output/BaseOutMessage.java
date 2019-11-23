@@ -22,6 +22,10 @@ public abstract class BaseOutMessage {
      * 消息创建时间
      */
     private long CreateTime;
+    /**
+     * 消息id，64位整型
+     */
+    private long MsgId;
 
     // 获取消息类型
     public abstract String getMsgType();

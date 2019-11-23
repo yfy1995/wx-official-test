@@ -44,24 +44,29 @@ public class WebChatService {
                 textMessage.getMsgType();
                 // respXml = ReplyMessageUtil.sendTextMessage(textMessage);
 
-                // 用map集合封装
+                //用map集合封装
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是文本消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.IMAGE_MESSAGE)) {
                 // 这里回复图片 或者图文消息 以图文消息为例
                 NewsOutputMessage message = new NewsOutputMessage();
+                message.setMsgId(Long.valueOf(map.get("MsgId")));
                 message.setToUserName(fromUserName);
                 message.setFromUserName(toUserName);
                 message.setCreateTime(System.currentTimeMillis());
                 message.getMsgType();
 
                 Articles article = new Articles();
-                article.setDescription("图文消息 "); // 图文消息的描述
+                // 图文消息的描述
+                article.setDescription("图文消息 ");
                 // 图文消息图片地址
                 article.setPicUrl("https://p4.ssl.cdn.btime.com/dmfd/192_108_/t019d0b65e33000f8a0.jpg?size=458x240");
-                article.setTitle("图文消息 "); // 图文消息标题
-                article.setUrl("http://www.baidu.com"); // 图文 url 链接
+                // 图文消息标题
+                article.setTitle("图文消息 ");
+                // 图文 url 链接
+                article.setUrl("http://www.baidu.com");
                 List<Articles> list = new ArrayList<>();
                 // 这里发送的是单图文，如果需要发送多图文则在这里 list 中加入多个Articles！
                 list.add(article);
@@ -73,22 +78,27 @@ public class WebChatService {
                 // 以下方式根据需要来操作
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是语音消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.VIDEO_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是视频消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.SHORTVIDEO_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是小视频消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.POSOTION_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是地理位置消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.LINK_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是链接消息");
+                replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             }
         } catch (Exception e) {
