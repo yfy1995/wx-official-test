@@ -134,6 +134,8 @@ public class WebChatService {
             //获取事件类型
             String eventType = map.get("Event");
 
+            logger.info("eventType:" + eventType);
+
             // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
             Map<String, String> replyMap = new HashMap<>();
             replyMap.put("ToUserName", fromUserName);
