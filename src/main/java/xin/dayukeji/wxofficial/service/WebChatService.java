@@ -143,7 +143,7 @@ public class WebChatService {
                 // 关注
                 // 用map集合封装
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
-//                replyMap.put("Content", MessageType.menuText());
+                replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
@@ -160,6 +160,41 @@ public class WebChatService {
             }
             if (eventType.equals(MessageType.EVENT_TYPE_CLICK)) {
                 // 自定义菜单
+                String eventKey = map.get("EventKey");
+                switch (eventKey) {
+                    case "12":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "公交查询～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    case "13":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "周边搜索～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    case "14":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "历史上的今天～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    case "21":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "java资料～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    case "22":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "python资料～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    case "23":
+                        replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+                        replyMap.put("Content", "架构师资料～～～");
+                        respXml = XmlUtil.xmlFormat(replyMap, true);
+                        break;
+                    default:
+                        throw new Exception();
+                }
 
             }
         } catch (Exception e) {
