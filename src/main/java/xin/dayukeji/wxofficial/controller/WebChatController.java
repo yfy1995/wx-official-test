@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  * @description 描述
  */
 @RestController
-@RequestMapping("/wx/test")
+@RequestMapping("/wx/yfy")
 public class WebChatController {
     /**
      * 开发者接入验证 确认请求来自微信服务器
