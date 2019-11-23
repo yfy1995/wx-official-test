@@ -1,0 +1,62 @@
+variables:
+  PROJECT_NAME: p19015
+  PROJECT_VERSION: "1.0.0"
+  DEVELOPMENT_HOST: 192.168.2.151
+  TEST_HOST: 192.168.2.154
+  PRODUCTION_HOST: 192.168.2.158
+  JAR_FILE_PATH: target/${PROJECT_NAME}-${PROJECT_VERSION}.jar
+stages:
+  - build
+dev:
+  only:
+    - /^NONE-EXEC$/
+  script:
+    - mvn clean package -Dmaven.test.skip=true
+    - test -d /var/www/springboot/$PROJECT_NAME || mkdir -p /var/www/springboot/$PROJECT_NAME
+    - cp $JAR_FILE_PATH /var/www/springboot/$PROJECT_NAME/server.jar
+    - cd /var/www/springboot/$PROJECT_NAME
+    - if test -f application.pid; then kill $(cat application.pid); fi
+    - sh -c "setsid java -jar server.jar --spring.profiles.active=tst >$PROJECT_NAME.log 2>&1 &"
+  type: build
+  tags:
+    - family
+    - mvn
+build:
+  only:
+  - /^tst-.*$/
+  script:
+  - mvn clean package -Dmaven.test.skip=true
+  - ssh depo@$DEVELOPMENT_HOST "test -d 'springboot/${PROJECT_NAME}' || mkdir -p 'springboot/${PROJECT_NAME}'"
+  - scp $JAR_FILE_PATH depo@$DEVELOPMENT_HOST:springboot/$PROJECT_NAME/server.jar
+  - ssh depo@$DEVELOPMENT_HOST "kill -9 \$(cat springboot/$PROJECT_NAME/application.pid) || exit 0"
+  - ssh depo@$DEVELOPMENT_HOST "sleep 10"
+  - ssh -n -f depo@$DEVELOPMENT_HOST "sh -c 'cd springboot/$PROJECT_NAME; nohup java -server -jar server.jar -Xms50m -Xmx50m -Xss512K -XX:PermSize=25m -XX:MaxPermSize=50m --spring.profiles.active=tst --env-config.ip=$DEVELOPMENT_HOST > /dev/null  2>&1 &'"
+  type: build
+  tags:
+  - mvn
+test:
+  only:
+  - /^test-\d+\.\d+\.\d+$/
+  script:
+  - mvn clean package -Dmaven.test.skip=true
+  - ssh depo@$TEST_HOST "test -d 'springboot/${PROJECT_NAME}' || mkdir -p 'springboot/${PROJECT_NAME}'"
+  - scp $JAR_FILE_PATH depo@$TEST_HOST:springboot/$PROJECT_NAME/server.jar
+  - ssh depo@$TEST_HOST "kill \$(cat springboot/$PROJECT_NAME/application.pid) || exit 0"
+  - ssh depo@$TEST_HOST "sleep 10"
+  - ssh -n -f depo@$TEST_HOST "sh -c 'cd springboot/$PROJECT_NAME; nohup java -jar server.jar  -Xms128m -Xmx256m --spring.profiles.active=test --env-config.ip=$TEST_HOST > $PROJECT_NAME.log  2>&1 &'"
+  type: build
+  tags:
+  - mvn
+depo:
+  only:
+  - /^v-.*$/
+  script:
+  - mvn clean package -Dmaven.test.skip=true
+  - ssh depo@$PRODUCTION_HOST "test -d 'springboot/${PROJECT_NAME}' || mkdir -p 'springboot/${PROJECT_NAME}'"
+  - ssh depo@$PRODUCTION_HOST "kill \$(cat springboot/$PROJECT_NAME/application.pid) || exit 0"
+  - scp $JAR_FILE_PATH depo@$PRODUCTION_HOST:springboot/$PROJECT_NAME/server.jar
+  - ssh depo@$PRODUCTION_HOST "sleep 10"
+  - ssh -n -f depo@$PRODUCTION_HOST "sh -c 'cd springboot/$PROJECT_NAME; nohup java -server -jar server.jar --spring.profiles.active=api --env-config.ip=$PRODUCTION_HOST > $PROJECT_NAME.log 2>&1 &'"
+  type: build
+  tags:
+  - mvn

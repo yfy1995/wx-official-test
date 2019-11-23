@@ -1,0 +1,50 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: https://mlog.dayukeji.xin/
+        password: Dayu!234
+        username: dayukeji
+  # >>> 数据库相关 <<< *
+  datasource:
+    name: wx-official-test
+    # 用户名
+    username: d1641
+    # 密码
+    password: D@yu2OIqi
+    url: jdbc:mysql://localhost:3306/wx-official-test?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
+  redis:
+    host: localhost
+    password: Dayu1234
+    port: 6379
+    database: 1
+  # ** 监控端口 ** #
+management:
+  server:
+    port: 10009
+    endpoint:
+      logfile:
+        enabled: true
+      loggers:
+        enabled: true
+# >>> 项目相关 <<< *
+server:
+  # 项目端口
+  port: 9999
+env-config:
+  ip: 192.168.2.151  #开发服内网ip
+  notify-template: SMS_146804689
+  file-upload-path: /var/www/static/p9999/
+  default-image: https://tst.dayukeji.xin/static/p9999/default.jpg
+  root-url: https://tst.dayukeji.xin/static/p9999/
+  secret-path: /usr/local/lib/wxmch/cert-dykj.p12
+  # ** 自定义 ** #
+  version: 1.3
+  # ** 必填 ** #
+  project: wx-official
+  # ** 需要做session的 ** #
+  intercept-list:
+    /**
+  user-appid: wx2ac4ab52eaf76dd7
+  user-secret: e3be166429b357d2fef4940801a9fa85
+  wallet-ip: 60.205.186.191

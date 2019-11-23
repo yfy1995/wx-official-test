@@ -1,0 +1,40 @@
+spring:
+  jpa:
+    show-sql: true
+  # >>> 数据库相关 <<< *
+  datasource:
+    name: p19020
+    # 用户名
+    username: root
+    # 密码
+    password: root
+    url: jdbc:mysql://localhost:3306/wx-official-test?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
+  redis:
+    host: localhost
+    password:
+    port: 6379
+    database: 1
+  # ** 监控端口 ** #
+management:
+  server:
+    port: 19120
+# >>> 项目相关 <<< *
+server:
+  # 项目端口
+  port: 19020
+env-config:
+  # ** 必填 ** #
+  project: wx-official
+  # ** 需要做session的 ** #
+  # ** 静态资源 ** #
+  file-upload-path: /Users/apple
+  default-image: https://tst.dayukeji.xin/static/wx-official/default.jpg
+  root-url: /Users/apple/
+  user-appid: wxe44b84acad24289b
+  user-secret: fda01d4dbe7c7d37020e1a45f81caa19
+  wallet-ip: 127.0.0.1
+  im-app-id: 18813069517
+  public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCBGWUoNqjO/OIWLSnRDXHbZVdfwgqMBS1GJIKOkvDixq+vpSolhjRYNa+CIP+H3NOVeCl5V0N8T2su4NzU+FiEbnooZ5jjiF58ljG0zrsTmKKYPZ3nVUJ3m+XpwFixQhQ0m3+kZ5PKBDq8zO3n/CrMOjsv3R67AM5RJg1v6+u2twIDAQAB
+third-service:
+  idcard:
+    appCode: e4be5a6380fd4b118ce1811410e8652c
