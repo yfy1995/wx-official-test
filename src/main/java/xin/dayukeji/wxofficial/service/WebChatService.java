@@ -1,6 +1,5 @@
 package xin.dayukeji.wxofficial.service;
 
-import lombok.extern.slf4j.Slf4j;
 import xin.dayukeji.wxofficial.entity.pojo.output.Articles;
 import xin.dayukeji.wxofficial.entity.pojo.output.NewsOutputMessage;
 import xin.dayukeji.wxofficial.entity.pojo.output.TextMessage;
@@ -19,8 +18,9 @@ import java.util.Map;
  * @Version 1.0
  * @description 处理接收信息和回复消息的服务类接口
  */
-@Slf4j
 public class WebChatService {
+
+
     /**
      * 处理微信发来的请求 map 消息业务处理分发
      *
@@ -42,7 +42,6 @@ public class WebChatService {
             replyMap.put("FromUserName", toUserName);
             replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
             if (MsgType.equals(MessageType.TEXT_MESSAGE)) {
-                log.info("发送文本信息"+map.get("Content"));
 
                 // 封装文本返回消息
                 TextMessage textMessage = new TextMessage();

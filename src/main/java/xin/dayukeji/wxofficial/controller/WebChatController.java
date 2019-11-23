@@ -1,6 +1,7 @@
 package xin.dayukeji.wxofficial.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +22,11 @@ import java.util.Map;
  * @Version 1.0
  * @description 描述
  */
-@Slf4j
 @RestController
 @RequestMapping("/wx/yfy")
 public class WebChatController {
+    private Logger logger = LoggerFactory.getLogger(WebChatController.class);
+
     /**
      * 开发者接入验证 确认请求来自微信服务器
      *
@@ -55,7 +57,7 @@ public class WebChatController {
 
     @PostMapping
     public void post(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("调用post请求");
+        logger.info("调用post请求");
 
         //消息来源可靠性验证
         // 微信加密签名
