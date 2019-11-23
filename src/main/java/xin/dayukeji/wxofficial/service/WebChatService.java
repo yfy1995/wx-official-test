@@ -42,13 +42,13 @@ public class WebChatService {
                 textMessage.setCreateTime(System.currentTimeMillis());
                 textMessage.setContent("您发送的是文本消息");
                 textMessage.getMsgType();
-                // respXml = ReplyMessageUtil.sendTextMessage(textMessage);
+                 respXml = ReplyMessageUtil.sendTextMessage(textMessage);
 
                 //用map集合封装
-                replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
-                replyMap.put("Content", "您发送的是文本消息");
-                replyMap.put("MsgId", map.get("MsgId"));
-                respXml = XmlUtil.xmlFormat(replyMap, true);
+//                replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
+//                replyMap.put("Content", "您发送的是文本消息");
+//                replyMap.put("MsgId", map.get("MsgId"));
+//                respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.IMAGE_MESSAGE)) {
                 // 这里回复图片 或者图文消息 以图文消息为例
                 NewsOutputMessage message = new NewsOutputMessage();
@@ -107,7 +107,11 @@ public class WebChatService {
         return respXml;
     }
 
-    // 事件消息业务分发
+    /**
+     * 事件消息业务分发
+     * @param map
+     * @return
+     */
     public static String parseEvent(Map<String, String> map) {
         String respXml = null;
         try {
@@ -116,7 +120,7 @@ public class WebChatService {
             // 开发者微信号
             String toUserName = map.get("ToUserName");
             // 取得消息类型
-            String MsgType = map.get("MsgType");
+            String msgType = map.get("MsgType");
             //获取事件类型
             String eventType = map.get("Event");
 
@@ -125,7 +129,8 @@ public class WebChatService {
             replyMap.put("ToUserName", fromUserName);
             replyMap.put("FromUserName", toUserName);
             replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis()));
-            if (eventType.equals(MessageType.EVENT_TYPE_SUBSCRIBE)) {// 关注
+            if (eventType.equals(MessageType.EVENT_TYPE_SUBSCRIBE)) {
+                // 关注
                 // 用map集合封装
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
 //                replyMap.put("Content", MessageType.menuText());
