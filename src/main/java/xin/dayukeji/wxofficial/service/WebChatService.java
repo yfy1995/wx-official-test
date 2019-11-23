@@ -19,7 +19,12 @@ import java.util.Map;
  * @description 处理接收信息和回复消息的服务类接口
  */
 public class WebChatService {
-    // 处理微信发来的请求 map 消息业务处理分发
+    /**
+     * 处理微信发来的请求 map 消息业务处理分发
+     *
+     * @param map
+     * @return
+     */
     public static String parseMessage(Map<String, String> map) {
         String respXml = null;
         try {
@@ -33,16 +38,17 @@ public class WebChatService {
             Map<String, String> replyMap = new HashMap<>();
             replyMap.put("ToUserName", fromUserName);
             replyMap.put("FromUserName", toUserName);
-            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis()));
+            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
             if (MsgType.equals(MessageType.TEXT_MESSAGE)) {
                 // 封装文本返回消息
                 TextMessage textMessage = new TextMessage();
                 textMessage.setToUserName(fromUserName);
                 textMessage.setFromUserName(toUserName);
-                textMessage.setCreateTime(System.currentTimeMillis());
+                textMessage.setCreateTime(System.currentTimeMillis() / 1000);
                 textMessage.setContent("您发送的是文本消息");
                 textMessage.getMsgType();
-                 respXml = ReplyMessageUtil.sendTextMessage(textMessage);
+                textMessage.setMsgId(Long.valueOf(map.get("MsgId")));
+                respXml = ReplyMessageUtil.sendTextMessage(textMessage);
 
                 //用map集合封装
 //                replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
@@ -55,7 +61,7 @@ public class WebChatService {
                 message.setMsgId(Long.valueOf(map.get("MsgId")));
                 message.setToUserName(fromUserName);
                 message.setFromUserName(toUserName);
-                message.setCreateTime(System.currentTimeMillis());
+                message.setCreateTime(System.currentTimeMillis() / 1000);
                 message.getMsgType();
 
                 Articles article = new Articles();
@@ -109,6 +115,7 @@ public class WebChatService {
 
     /**
      * 事件消息业务分发
+     *
      * @param map
      * @return
      */
@@ -128,7 +135,7 @@ public class WebChatService {
             Map<String, String> replyMap = new HashMap<>();
             replyMap.put("ToUserName", fromUserName);
             replyMap.put("FromUserName", toUserName);
-            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis()));
+            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
             if (eventType.equals(MessageType.EVENT_TYPE_SUBSCRIBE)) {
                 // 关注
                 // 用map集合封装

@@ -27,6 +27,10 @@ public abstract class BaseOutMessage {
      */
     private long MsgId;
 
-    // 获取消息类型
+    /**
+     * 获取消息类型
+     *
+     * @return
+     */
     public abstract String getMsgType();
 }

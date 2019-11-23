@@ -39,7 +39,7 @@ public class XmlUtil {
         if (CollectionUtil.isNotEmpty(param)) {
             for (Map.Entry<String, String> entry : param.entrySet()) {
                 strBuff.append("<").append(entry.getKey()).append(">");
-                if (isAddCDATA) {
+                if (isAddCDATA && !"CreateTime".equals(entry.getKey())) {
                     strBuff.append(PREFIX_CDATA);
                     if (StringUtil.isNotEmpty(entry.getValue())) {
                         strBuff.append(entry.getValue());
