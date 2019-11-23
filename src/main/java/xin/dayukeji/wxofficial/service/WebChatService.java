@@ -134,9 +134,6 @@ public class WebChatService {
             //获取事件类型
             String eventType = map.get("Event");
 
-            logger.info("eventType:"+map.get("eventType"));
-            logger.info("EventKey:"+map.get("EventKey"));
-
             // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
             Map<String, String> replyMap = new HashMap<>();
             replyMap.put("ToUserName", fromUserName);
@@ -162,8 +159,11 @@ public class WebChatService {
 
             }
             if (eventType.equals(MessageType.EVENT_TYPE_CLICK)) {
+                logger.info("进入自定义菜单逻辑");
                 // 自定义菜单
                 String eventKey = map.get("EventKey");
+
+                logger.info("eventKey:" + eventKey);
                 switch (eventKey) {
                     case "12":
                         replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
