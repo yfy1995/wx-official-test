@@ -1,5 +1,7 @@
 package xin.dayukeji.wxofficial.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import xin.dayukeji.wxofficial.entity.pojo.output.Articles;
 import xin.dayukeji.wxofficial.entity.pojo.output.NewsOutputMessage;
 import xin.dayukeji.wxofficial.entity.pojo.output.TextMessage;
@@ -19,7 +21,7 @@ import java.util.Map;
  * @description 处理接收信息和回复消息的服务类接口
  */
 public class WebChatService {
-
+    private static Logger logger = LoggerFactory.getLogger(WebChatService.class);
 
     /**
      * 处理微信发来的请求 map 消息业务处理分发
@@ -129,10 +131,11 @@ public class WebChatService {
             String fromUserName = map.get("FromUserName");
             // 开发者微信号
             String toUserName = map.get("ToUserName");
-            // 取得消息类型
-            String msgType = map.get("MsgType");
             //获取事件类型
             String eventType = map.get("Event");
+
+            logger.info("eventType:"+map.get("eventType"));
+            logger.info("EventKey:"+map.get("EventKey"));
 
             // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
             Map<String, String> replyMap = new HashMap<>();
