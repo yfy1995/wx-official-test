@@ -59,7 +59,7 @@ public class MenuManager {
         btn11.setName("搜索");
         btn11.setType("view");
         btn11.setKey("11");
-        btn11.setUrl("https://tst.dayukeji.xin/auth/wechat");
+        btn11.setUrl("https://tst.dayukeji.xin/mptest/api/auth/wechat");
 
         CommonButton btn12 = new CommonButton();
         btn12.setName("公交查询");

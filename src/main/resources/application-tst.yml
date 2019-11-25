@@ -47,7 +47,7 @@ env-config:
     /**
   user-appid: wx33e5389d1a2cde19
   user-secret: fa132a5549b1ca9dc92081e752d12340
-  access-Url: https://tst.dayukeji.xin/mptest/api/auth/login
+  access-Url: tst.dayukeji.xin/mptest/api/auth/login
   wallet-ip: 60.205.186.191
 third-service:
   tencent:

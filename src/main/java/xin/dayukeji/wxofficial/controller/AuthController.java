@@ -61,9 +61,8 @@ public class AuthController {
     @ExcludeInterceptor
     public void post(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String code = request.getParameter("code");
-        System.out.println("终于获取到CODE了:" + code);
         /**
-         * 第三步：通过code换取网页授权access_token
+         * 通过code换取网页授权access_token
          */
         try {
             response.setCharacterEncoding("UTF-8");
