@@ -59,7 +59,7 @@ public class WebChatController {
 
 
     @PostMapping
-    public void post(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void post(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("微信调用post请求");
 
         //消息来源可靠性验证
@@ -99,6 +99,7 @@ public class WebChatController {
             //返回封装的xml
             response.getWriter().write(xml);
         } catch (Exception ex) {
+            logger.info("走了异常》》》" + ex);
             response.getWriter().write("");
         }
     }
