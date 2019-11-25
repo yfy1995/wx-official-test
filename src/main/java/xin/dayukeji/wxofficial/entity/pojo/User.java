@@ -86,7 +86,7 @@ public class User {
 
 
     @Basic
-    @Column(name = "county")
+    @Column(name = "country")
     public String getCountry() {
         return country;
     }
