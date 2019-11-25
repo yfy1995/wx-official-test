@@ -6,8 +6,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xin.dayukeji.common.exception.CommonException;
-import xin.dayukeji.wxofficial.entity.enums.ErrorCodeEnum;
 import xin.dayukeji.wxofficial.entity.pojo.User;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
@@ -137,7 +135,7 @@ public class WebChatService {
      * @param map
      * @return
      */
-    public String parseEvent(Map<String, String> map) throws Exception {
+    public String parseEvent(Map<String, String> map) {
         String respXml = null;
         try {
             // 发送方帐号
@@ -149,7 +147,7 @@ public class WebChatService {
 
             logger.info("eventType:" + eventType);
 
-            // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
+            // 把要返回的信息直接封装成replyMap集合，然后转换成xml文件
             Map<String, String> replyMap = getReplyMap(fromUserName, toUserName);
             if (eventType.equals(MessageType.EVENT_TYPE_SUBSCRIBE)) {
                 // 关注
@@ -161,21 +159,22 @@ public class WebChatService {
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
                 logger.info("用户取消关注了");
+                return "";
             }
             if (eventType.equals(MessageType.EVENT_TYPE_SCAN)) {
                 // 用户已关注时的扫描带参数二维码
                 logger.info("用户已关注时的扫描带参数二维码");
-                throw new CommonException(ErrorCodeEnum.GL9999001);
+                return "";
             }
             if (eventType.equals(MessageType.EVENT_TYPE_LOCATION)) {
                 // 上报地理位置
                 logger.info("用户上报地理位置");
-                throw new CommonException(ErrorCodeEnum.GL9999001);
+                return "";
             }
             if (eventType.equals(MessageType.EVENT_SKIP_LINK)) {
                 //点击菜单跳转链接
                 logger.info("用户点击菜单跳转链接");
-                throw new CommonException(ErrorCodeEnum.GL9999001);
+                return "";
             }
             if (eventType.equals(MessageType.EVENT_TYPE_CLICK)) {
                 logger.info("进入自定义菜单逻辑");
@@ -215,7 +214,7 @@ public class WebChatService {
                         respXml = XmlUtil.xmlFormat(replyMap, true);
                         break;
                     default:
-                        throw new CommonException(ErrorCodeEnum.GL9999001);
+                        return "";
                 }
 
             }
