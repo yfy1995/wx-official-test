@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.dayukeji.wxofficial.entity.pojo.User;
+import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
 import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
@@ -230,12 +231,16 @@ public class WebChatService {
      * @param openId
      */
     public void register(String openId) {
-        String accessToken = "27_ri52KzmQi1x9gwiH41IrWlwePlY_HSf0n6EkGenGGNl-4oql2S2jroPk9YVGXjohxGvmgGcj_Qgix_fBlwF9V9Gh2-jOE8KJJ_RqJ7G25fm1PDVrwM7AEIMb_swjhCLSPr9Pdqn76At9t0UVYBUgABAQTM";
+        // 第三方用户唯一凭证
+        String appId = "wx33e5389d1a2cde19";
+        // 第三方用户唯一凭证密钥
+        String appSecret = "fa132a5549b1ca9dc92081e752d12340";
+        AccessToken accessToken = WeixinUtil.getAccessToken(appId, appSecret);
         User user = userRepository.findByOpenId(openId);
         if (user == null) {
             user = new User();
             user.setOpenId(openId);
-            UserInfo userInfo = WeixinUtil.getUserInfo(accessToken, openId);
+            UserInfo userInfo = WeixinUtil.getUserInfo(accessToken.getAccessToken(), openId);
             logger.info("userInfo:" + userInfo);
             if (userInfo.getSubscribe_time() != null) {
                 packUser(user, userInfo);
