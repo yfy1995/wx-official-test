@@ -70,8 +70,6 @@ public class AuthController {
          */
         try {
             response.setCharacterEncoding("UTF-8");
-//            response.setContentType("text/xml");
-
             webChatService.registerByWeb(code);
 
             response.getWriter().write("");
