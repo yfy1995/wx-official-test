@@ -160,8 +160,6 @@ public class WebChatService {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
-
-                throw new Exception();
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
