@@ -160,7 +160,13 @@ public class WebChatService {
                 // 上报地理位置
                 logger.info("用户上报地理位置");
                 String label = map.get("Label");
+                String sendLocationInfo = map.get("SendLocationInfo");
+                String location_X = map.get("Location_X");
+                String location_Y = map.get("Location_Y");
                 logger.info("label:" + label);
+                logger.info("sendLocationInfo:" + sendLocationInfo);
+                logger.info("location_X:" + location_X);
+                logger.info("location_Y:" + location_Y);
             }
             if (eventType.equals(MessageType.EVENT_SKIP_LINK)) {
                 //点击菜单跳转链接
