@@ -1,5 +1,7 @@
 package xin.dayukeji.wxofficial.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import java.net.URLEncoder;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    public static Logger logger = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     private WxOfficialEnv wxOfficialEnv;
     @Autowired
@@ -59,14 +62,15 @@ public class AuthController {
     @GetMapping("/login")
     @ResponseBody
     @ExcludeInterceptor
-    public void post(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.info("login接口被访问");
         String code = request.getParameter("code");
         /**
          * 通过code换取网页授权access_token
          */
         try {
             response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/xml");
+//            response.setContentType("text/xml");
 
             webChatService.registerByWeb(code);
 
