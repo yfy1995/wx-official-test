@@ -2,8 +2,6 @@ package xin.dayukeji.wxofficial.entity.wechat;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
-
 /**
  * @Author: yfy
  * @Date: 2019-11-25 15:09
@@ -47,7 +45,7 @@ public class UserInfo {
     /**
      * 用户关注时间
      */
-    private Timestamp subscribe_time;
+    private long subscribe_time;
     /**
      * 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段
      */

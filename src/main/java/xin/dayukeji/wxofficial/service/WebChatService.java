@@ -17,6 +17,7 @@ import xin.dayukeji.wxofficial.util.ReplyMessageUtil;
 import xin.dayukeji.wxofficial.util.WeixinUtil;
 import xin.dayukeji.wxofficial.util.XmlUtil;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -247,7 +248,7 @@ public class WebChatService {
      */
     private void packUser(User user, UserInfo userInfo) {
         BeanUtils.copyProperties(userInfo, user, User.class);
-        user.setSubscribeTime(userInfo.getSubscribe_time());
+        user.setSubscribeTime(new Timestamp(userInfo.getSubscribe_time() * 1000));
         user.setAvatar(userInfo.getHeadimgurl());
     }
 }
