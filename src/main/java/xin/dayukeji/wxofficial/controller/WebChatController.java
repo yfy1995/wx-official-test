@@ -2,6 +2,7 @@ package xin.dayukeji.wxofficial.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,8 @@ import java.util.Map;
 @RequestMapping("/wx/yfy")
 public class WebChatController {
     private Logger logger = LoggerFactory.getLogger(WebChatController.class);
+    @Autowired
+    private WebChatService webChatService;
 
     /**
      * 开发者接入验证 确认请求来自微信服务器
@@ -73,6 +76,7 @@ public class WebChatController {
             return;
         }
 
+
         //用户每次向公众号发送消息、或者产生自定义菜单点击事件时，响应URL将得到推送
         try {
             response.setCharacterEncoding("UTF-8");
@@ -80,12 +84,17 @@ public class WebChatController {
             //调用parseXml方法解析请求消息
             Map<String, String> map = MessageType.parseXml(request, response);
             String msgType = map.get("MsgType");
+            String openId = map.get("FromUserName");
+
+            //判断该用户是否存在，不存在则注册
+            webChatService.register(openId);
+
             //处理输入消息，返回结果的xml
             String xml;
             if (MessageType.REQ_MESSAGE_TYPE_EVENT.equals(msgType)) {
-                xml = WebChatService.parseEvent(map);
+                xml = webChatService.parseEvent(map);
             } else {
-                xml = WebChatService.parseMessage(map);
+                xml = webChatService.parseMessage(map);
             }
             //返回封装的xml
             response.getWriter().write(xml);

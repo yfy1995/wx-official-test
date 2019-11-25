@@ -2,11 +2,11 @@ package xin.dayukeji.wxofficial.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xin.dayukeji.wxofficial.entity.pojo.AccessToken;
-import xin.dayukeji.wxofficial.entity.pojo.menu.Button;
-import xin.dayukeji.wxofficial.entity.pojo.menu.CommonButton;
-import xin.dayukeji.wxofficial.entity.pojo.menu.ComplexButton;
-import xin.dayukeji.wxofficial.entity.pojo.menu.Menu;
+import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
+import xin.dayukeji.wxofficial.entity.wechat.menu.Button;
+import xin.dayukeji.wxofficial.entity.wechat.menu.CommonButton;
+import xin.dayukeji.wxofficial.entity.wechat.menu.ComplexButton;
+import xin.dayukeji.wxofficial.entity.wechat.menu.Menu;
 import xin.dayukeji.wxofficial.util.WeixinUtil;
 
 /**
@@ -27,9 +27,18 @@ public class MenuManager {
         // 调用接口获取access_token
         AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
 
+        setMenu(getMenu(), at);
+    }
+
+    /**
+     * 设置菜单
+     *
+     * @param at
+     */
+    public static void setMenu(Menu menu, AccessToken at) {
         if (null != at) {
             // 调用接口创建菜单
-            int result = WeixinUtil.createMenu(getMenu(), at.getAccessToken());
+            int result = WeixinUtil.createMenu(menu, at.getAccessToken());
 
             // 判断菜单创建结果
             if (0 == result) {
@@ -120,7 +129,7 @@ public class MenuManager {
 
         ComplexButton mainBtn3 = new ComplexButton();
         mainBtn3.setName("发图");
-        mainBtn3.setSub_button(new CommonButton[]{btn31, btn32, btn33,btn34});
+        mainBtn3.setSub_button(new CommonButton[]{btn31, btn32, btn33, btn34});
 
 
         /**

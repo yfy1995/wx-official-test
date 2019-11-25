@@ -1,6 +1,6 @@
 package xin.dayukeji.wxofficial.util;
 
-import xin.dayukeji.wxofficial.entity.pojo.output.*;
+import xin.dayukeji.wxofficial.entity.wechat.output.*;
 
 import java.io.Serializable;
 

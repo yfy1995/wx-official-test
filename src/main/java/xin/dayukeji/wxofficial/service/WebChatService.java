@@ -2,11 +2,19 @@ package xin.dayukeji.wxofficial.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xin.dayukeji.wxofficial.entity.pojo.output.Articles;
-import xin.dayukeji.wxofficial.entity.pojo.output.NewsOutputMessage;
-import xin.dayukeji.wxofficial.entity.pojo.output.TextMessage;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import xin.dayukeji.wxofficial.entity.pojo.User;
+import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
+import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
+import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
+import xin.dayukeji.wxofficial.entity.wechat.output.TextMessage;
+import xin.dayukeji.wxofficial.repository.UserRepository;
 import xin.dayukeji.wxofficial.util.MessageType;
 import xin.dayukeji.wxofficial.util.ReplyMessageUtil;
+import xin.dayukeji.wxofficial.util.WeixinUtil;
 import xin.dayukeji.wxofficial.util.XmlUtil;
 
 import java.util.ArrayList;
@@ -20,8 +28,12 @@ import java.util.Map;
  * @Version 1.0
  * @description 处理接收信息和回复消息的服务类接口
  */
+@Service
+@Transactional
 public class WebChatService {
     private static Logger logger = LoggerFactory.getLogger(WebChatService.class);
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * 处理微信发来的请求 map 消息业务处理分发
@@ -29,7 +41,7 @@ public class WebChatService {
      * @param map
      * @return
      */
-    public static String parseMessage(Map<String, String> map) {
+    public String parseMessage(Map<String, String> map) {
         String respXml = null;
         try {
             // 发送方帐号
@@ -39,12 +51,8 @@ public class WebChatService {
             // 取得消息类型
             String MsgType = map.get("MsgType");
             // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
-            Map<String, String> replyMap = new HashMap<>();
-            replyMap.put("ToUserName", fromUserName);
-            replyMap.put("FromUserName", toUserName);
-            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
+            Map<String, String> replyMap = getReplyMap(fromUserName, toUserName);
             if (MsgType.equals(MessageType.TEXT_MESSAGE)) {
-
                 // 封装文本返回消息
                 TextMessage textMessage = new TextMessage();
                 textMessage.setToUserName(fromUserName);
@@ -54,12 +62,6 @@ public class WebChatService {
                 textMessage.getMsgType();
                 textMessage.setMsgId(Long.valueOf(map.get("MsgId")));
                 respXml = ReplyMessageUtil.sendTextMessage(textMessage);
-
-                //用map集合封装
-//                replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
-//                replyMap.put("Content", "您发送的是文本消息");
-//                replyMap.put("MsgId", map.get("MsgId"));
-//                respXml = XmlUtil.xmlFormat(replyMap, true);
             } else if (MsgType.equals(MessageType.IMAGE_MESSAGE)) {
                 // 这里回复图片 或者图文消息 以图文消息为例
                 NewsOutputMessage message = new NewsOutputMessage();
@@ -118,13 +120,21 @@ public class WebChatService {
         return respXml;
     }
 
+    private Map<String, String> getReplyMap(String fromUserName, String toUserName) {
+        Map<String, String> replyMap = new HashMap<>();
+        replyMap.put("ToUserName", fromUserName);
+        replyMap.put("FromUserName", toUserName);
+        replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
+        return replyMap;
+    }
+
     /**
      * 事件消息业务分发
      *
      * @param map
      * @return
      */
-    public static String parseEvent(Map<String, String> map) {
+    public String parseEvent(Map<String, String> map) {
         String respXml = null;
         try {
             // 发送方帐号
@@ -137,10 +147,7 @@ public class WebChatService {
             logger.info("eventType:" + eventType);
 
             // 发现直接把要返回的信息直接封装成replyMap集合，然后转换成 xml文件，是不是实体类可以不用了
-            Map<String, String> replyMap = new HashMap<>();
-            replyMap.put("ToUserName", fromUserName);
-            replyMap.put("FromUserName", toUserName);
-            replyMap.put("CreateTime", String.valueOf(System.currentTimeMillis() / 1000));
+            Map<String, String> replyMap = getReplyMap(fromUserName, toUserName);
             if (eventType.equals(MessageType.EVENT_TYPE_SUBSCRIBE)) {
                 // 关注
                 // 用map集合封装
@@ -159,14 +166,6 @@ public class WebChatService {
             if (eventType.equals(MessageType.EVENT_TYPE_LOCATION)) {
                 // 上报地理位置
                 logger.info("用户上报地理位置");
-                String label = map.get("Label");
-                String sendLocationInfo = map.get("SendLocationInfo");
-                String location_X = map.get("Location_X");
-                String location_Y = map.get("Location_Y");
-                logger.info("label:" + label);
-                logger.info("sendLocationInfo:" + sendLocationInfo);
-                logger.info("location_X:" + location_X);
-                logger.info("location_Y:" + location_Y);
             }
             if (eventType.equals(MessageType.EVENT_SKIP_LINK)) {
                 //点击菜单跳转链接
@@ -218,5 +217,37 @@ public class WebChatService {
             e.printStackTrace();
         }
         return respXml;
+    }
+
+    /**
+     * 注册用户
+     *
+     * @param openId
+     */
+    public void register(String openId) {
+        String accessToken = "27_ri52KzmQi1x9gwiH41IrWlwePlY_HSf0n6EkGenGGNl-4oql2S2jroPk9YVGXjohxGvmgGcj_Qgix_fBlwF9V9Gh2-jOE8KJJ_RqJ7G25fm1PDVrwM7AEIMb_swjhCLSPr9Pdqn76At9t0UVYBUgABAQTM";
+        logger.info("新用户注册===openId:" + openId);
+        User user = userRepository.findByOpenId(openId);
+        if (user == null) {
+            user = new User();
+            user.setOpenId(openId);
+            UserInfo userInfo = WeixinUtil.getUserInfo(accessToken, openId);
+            if (userInfo != null) {
+                packUser(user, userInfo);
+                userRepository.save(user);
+            }
+        }
+    }
+
+    /**
+     * 封装用户信息
+     *
+     * @param user
+     * @param userInfo
+     */
+    private void packUser(User user, UserInfo userInfo) {
+        BeanUtils.copyProperties(userInfo, user, User.class);
+        user.setSubscribeTime(userInfo.getSubscribe_time());
+        user.setAvatar(userInfo.getHeadimgurl());
     }
 }

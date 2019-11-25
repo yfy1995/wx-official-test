@@ -4,9 +4,14 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xin.dayukeji.wxofficial.entity.pojo.AccessToken;
-import xin.dayukeji.wxofficial.entity.pojo.MyX509TrustManager;
-import xin.dayukeji.wxofficial.entity.pojo.menu.Menu;
+import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
+import xin.dayukeji.wxofficial.entity.wechat.MyX509TrustManager;
+import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
+import xin.dayukeji.wxofficial.entity.wechat.menu.Menu;
+import xin.dayukeji.wxofficial.entity.wechat.template.Industry;
+import xin.dayukeji.wxofficial.entity.wechat.template.MyIndustry;
+import xin.dayukeji.wxofficial.entity.wechat.template.Template;
+import xin.dayukeji.wxofficial.entity.wechat.template.TemplateMessage;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -30,11 +35,153 @@ public class WeixinUtil {
 
     private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);
 
-    // 获取access_token的接口地址（GET） 限200（次/天）
+    /**
+     * 获取用户信息（GET）
+     */
+    public static String get_user_info = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+    /**
+     * 获取access_token的接口地址（GET）
+     */
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-
-    // 菜单创建（POST） 限100（次/天）
+    /**
+     * 菜单创建（POST）
+     */
     public static String menu_create_url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+    /**
+     * 设置所属行业（POST）
+     */
+    public static String set_belong_industry = "https://api.weixin.qq.com/cgi-bin/template/api_set_industry?access_token=ACCESS_TOKEN";
+    /**
+     * 获取所属行业（GET）
+     */
+    public static String get_belong_industry = "https://api.weixin.qq.com/cgi-bin/template/get_industry?access_token=ACCESS_TOKEN";
+    /**
+     * 获取模板列表（GET）
+     */
+    public static String get_template_list = "https://api.weixin.qq.com/cgi-bin/template/get_all_private_template?access_token=ACCESS_TOKEN";
+    /**
+     * 发送模板消息（POST）
+     */
+    public static String send_template_message = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+
+    /**
+     * 获取用户信息
+     *
+     * @param accessToken 有效的access_token
+     * @return
+     */
+    public static UserInfo getUserInfo(String accessToken, String openId) {
+        UserInfo userInfo = null;
+
+        String url = get_user_info.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+        JSONObject jsonObject = httpRequest(url, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                userInfo = JSONObject.toJavaObject(jsonObject, UserInfo.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取用户信息失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return userInfo;
+    }
+
+    /**
+     * 设置所属行业
+     *
+     * @param industry    所属行业实例
+     * @param accessToken 有效的access_token
+     * @return 0表示成功，其他值表示失败
+     */
+    public static int setBelongIndustry(Industry industry, String accessToken) {
+        int result = 0;
+        // 拼装创建菜单的url
+        String url = set_belong_industry.replace("ACCESS_TOKEN", accessToken);
+        // 将菜单对象转换成json字符串
+        String jsonIndustry = JSONObject.toJSON(industry).toString();
+        // 调用接口创建菜单
+        JSONObject jsonObject = httpRequest(url, "POST", jsonIndustry);
+        if (null != jsonObject) {
+            if (0 != jsonObject.getInteger("errcode")) {
+                result = jsonObject.getInteger("errcode");
+                log.error("设置所属行业失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取所属行业
+     *
+     * @param accessToken 有效的access_token
+     * @return
+     */
+    public static MyIndustry getBelongIndustry(String accessToken) {
+        MyIndustry myIndustry = null;
+
+        String url = get_belong_industry.replace("ACCESS_TOKEN", accessToken);
+        JSONObject jsonObject = httpRequest(url, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                myIndustry = JSONObject.toJavaObject(jsonObject, MyIndustry.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取所属行业失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return myIndustry;
+    }
+
+    /**
+     * 获取模板列表
+     *
+     * @param accessToken 有效的access_token
+     * @return
+     */
+    public static Template getTemplateList(String accessToken) {
+        Template template = null;
+
+        String url = get_template_list.replace("ACCESS_TOKEN", accessToken);
+        JSONObject jsonObject = httpRequest(url, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                template = JSONObject.toJavaObject(jsonObject, Template.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取模板列表失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return template;
+    }
+
+    /**
+     * 发送模板消息
+     *
+     * @param templateMessage 所属行业实例
+     * @param accessToken     有效的access_token
+     * @return 0表示成功，其他值表示失败
+     */
+    public static int sendTemplateMessage(TemplateMessage templateMessage, String accessToken) {
+        int result = 0;
+        // 拼装创建菜单的url
+        String url = send_template_message.replace("ACCESS_TOKEN", accessToken);
+        // 将菜单对象转换成json字符串
+        String jsonTemplateMessage = JSONObject.toJSON(templateMessage).toString();
+        // 调用接口创建菜单
+        JSONObject jsonObject = httpRequest(url, "POST", jsonTemplateMessage);
+        if (null != jsonObject) {
+            if (0 != jsonObject.getInteger("errcode")) {
+                result = jsonObject.getInteger("errcode");
+                log.error("发送模板消息失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+
+        return result;
+    }
 
     /**
      * 创建菜单
