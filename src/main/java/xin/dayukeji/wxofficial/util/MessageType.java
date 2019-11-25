@@ -37,11 +37,11 @@ public class MessageType {
     /**
      * 小视频消息消息
      */
-    public static final String SHORTVIDEO_MESSAGE = "shortvideo";
+    public static final String SHORT_VIDEO_MESSAGE = "shortvideo";
     /**
      * 地理位置消息
      */
-    public static final String POSOTION_MESSAGE = "location";
+    public static final String POSITION_MESSAGE = "location";
     /**
      * 链接消息
      */
@@ -65,20 +65,23 @@ public class MessageType {
     /**
      * 事件类型：unsubscribe(取消订阅)
      */
-    public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
+    public static final String EVENT_TYPE_UNSUBSCRIBE = "UNSUBSCRIBE";
     /**
      * 事件类型：scan(用户已关注时的扫描带参数二维码)
      */
-    public static final String EVENT_TYPE_SCAN = "scan";
+    public static final String EVENT_TYPE_SCAN = "SCAN";
     /**
      * 事件类型：LOCATION(上报地理位置)
      */
-    public static final String EVENT_TYPE_LOCATION = "location";
+    public static final String EVENT_TYPE_LOCATION = "LOCATION";
+    /**
+     * 事件类型：VIEW(点击菜单跳转链接)
+     */
+    public static final String EVENT_SKIP_LINK = "VIEW";
     /**
      * 事件类型：CLICK(自定义菜单)
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
-
     /**
      * 响应消息类型：文本
      */

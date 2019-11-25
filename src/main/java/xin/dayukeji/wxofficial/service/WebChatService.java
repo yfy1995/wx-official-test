@@ -96,12 +96,12 @@ public class WebChatService {
                 replyMap.put("Content", "您发送的是视频消息");
                 replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
-            } else if (MsgType.equals(MessageType.SHORTVIDEO_MESSAGE)) {
+            } else if (MsgType.equals(MessageType.SHORT_VIDEO_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是小视频消息");
                 replyMap.put("MsgId", map.get("MsgId"));
                 respXml = XmlUtil.xmlFormat(replyMap, true);
-            } else if (MsgType.equals(MessageType.POSOTION_MESSAGE)) {
+            } else if (MsgType.equals(MessageType.POSITION_MESSAGE)) {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "您发送的是地理位置消息");
                 replyMap.put("MsgId", map.get("MsgId"));
@@ -150,15 +150,19 @@ public class WebChatService {
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
-
+                logger.info("用户取消关注了");
             }
             if (eventType.equals(MessageType.EVENT_TYPE_SCAN)) {
                 // 用户已关注时的扫描带参数二维码
-
+                logger.info("用户已关注时的扫描带参数二维码");
             }
             if (eventType.equals(MessageType.EVENT_TYPE_LOCATION)) {
                 // 上报地理位置
-
+                logger.info("用户上报地理位置");
+            }
+            if (eventType.equals(MessageType.EVENT_SKIP_LINK)) {
+                //点击菜单跳转链接
+                logger.info("用户点击菜单跳转链接");
             }
             if (eventType.equals(MessageType.EVENT_TYPE_CLICK)) {
                 logger.info("进入自定义菜单逻辑");

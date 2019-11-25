@@ -57,7 +57,7 @@ public class WebChatController {
 
     @PostMapping
     public void post(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        logger.info("调用post请求");
+        logger.info("微信调用post请求");
 
         //消息来源可靠性验证
         // 微信加密签名
