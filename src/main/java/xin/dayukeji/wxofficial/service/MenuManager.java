@@ -97,6 +97,11 @@ public class MenuManager {
         btn33.setType("pic_weixin");
         btn33.setKey("33");
 
+        CommonButton btn34 = new CommonButton();
+        btn34.setName("发送位置");
+        btn34.setType("location_select");
+        btn34.setKey("34");
+
 
         /**
          * 微信：  mainBtn1,mainBtn2,mainBtn3底部的三个一级菜单。
@@ -115,7 +120,7 @@ public class MenuManager {
 
         ComplexButton mainBtn3 = new ComplexButton();
         mainBtn3.setName("发图");
-        mainBtn3.setSub_button(new CommonButton[]{btn31, btn32, btn33});
+        mainBtn3.setSub_button(new CommonButton[]{btn31, btn32, btn33,btn34});
 
 
         /**

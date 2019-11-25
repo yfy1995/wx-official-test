@@ -159,6 +159,8 @@ public class WebChatService {
             if (eventType.equals(MessageType.EVENT_TYPE_LOCATION)) {
                 // 上报地理位置
                 logger.info("用户上报地理位置");
+                String label = map.get("Label");
+                logger.info("label:" + label);
             }
             if (eventType.equals(MessageType.EVENT_SKIP_LINK)) {
                 //点击菜单跳转链接

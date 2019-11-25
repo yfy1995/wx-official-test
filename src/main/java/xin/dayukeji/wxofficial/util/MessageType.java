@@ -73,7 +73,7 @@ public class MessageType {
     /**
      * 事件类型：LOCATION(上报地理位置)
      */
-    public static final String EVENT_TYPE_LOCATION = "LOCATION";
+    public static final String EVENT_TYPE_LOCATION = "location_select";
     /**
      * 事件类型：VIEW(点击菜单跳转链接)
      */
