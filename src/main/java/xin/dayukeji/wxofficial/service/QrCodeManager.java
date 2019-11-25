@@ -26,14 +26,14 @@ public class QrCodeManager {
         AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
 
         QrCodeInfo qrCode = WeixinUtil.createQrCode(getQrCode(), at.getAccessToken());
-        if (qrCode != null) {
-            String url = qrCode.getUrl();
-            try {
-                QRCodeUtil.encode(url, "/Users/apple/test.jpg");
-            } catch (Exception e) {
-                log.info("生成二维码失败:" + e);
-            }
+
+        String url = qrCode.getUrl();
+        try {
+            QRCodeUtil.encode(url, "/Users/apple/test.jpg");
+        } catch (Exception e) {
+            log.info("生成二维码失败:" + e);
         }
+
     }
 
     private static QrCode getQrCode() {

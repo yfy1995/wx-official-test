@@ -45,7 +45,7 @@ public class UserInfo {
     /**
      * 用户关注时间
      */
-    private long subscribe_time;
+    private Long subscribe_time;
     /**
      * 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段
      */

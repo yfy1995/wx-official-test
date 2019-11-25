@@ -229,14 +229,14 @@ public class WebChatService {
         String accessToken = "27_ri52KzmQi1x9gwiH41IrWlwePlY_HSf0n6EkGenGGNl-4oql2S2jroPk9YVGXjohxGvmgGcj_Qgix_fBlwF9V9Gh2-jOE8KJJ_RqJ7G25fm1PDVrwM7AEIMb_swjhCLSPr9Pdqn76At9t0UVYBUgABAQTM";
         User user = userRepository.findByOpenId(openId);
         if (user == null) {
-            logger.info("新用户注册===openId:" + openId);
             user = new User();
             user.setOpenId(openId);
             UserInfo userInfo = WeixinUtil.getUserInfo(accessToken, openId);
             logger.info("userInfo:" + userInfo);
-            if (userInfo != null) {
+            if (userInfo.getSubscribe_time() != null) {
                 packUser(user, userInfo);
                 userRepository.save(user);
+                logger.info("新用户注册===openId:" + openId);
             }
         }
     }
