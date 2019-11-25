@@ -137,7 +137,7 @@ public class WebChatService {
      * @param map
      * @return
      */
-    public String parseEvent(Map<String, String> map) {
+    public String parseEvent(Map<String, String> map) throws Exception {
         String respXml = null;
         try {
             // 发送方帐号
