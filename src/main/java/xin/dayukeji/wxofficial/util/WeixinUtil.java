@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
-import xin.dayukeji.wxofficial.entity.wechat.MyX509TrustManager;
-import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
+import xin.dayukeji.wxofficial.entity.wechat.*;
 import xin.dayukeji.wxofficial.entity.wechat.menu.Menu;
 import xin.dayukeji.wxofficial.entity.wechat.template.Industry;
 import xin.dayukeji.wxofficial.entity.wechat.template.MyIndustry;
@@ -63,6 +61,10 @@ public class WeixinUtil {
      * 发送模板消息（POST）
      */
     public static String send_template_message = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+    /**
+     * 生成永久二维码（POST）
+     */
+    public static String generate_qr_code = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
 
     /**
      * 获取用户信息
@@ -194,13 +196,11 @@ public class WeixinUtil {
         int result = 0;
         // 拼装创建菜单的url
         String url = menu_create_url.replace("ACCESS_TOKEN", accessToken);
-        System.out.println("url:" + url);
         // 将菜单对象转换成json字符串
         String jsonMenu = JSONObject.toJSON(menu).toString();
         System.out.println("jsonMenu" + jsonMenu);
         // 调用接口创建菜单
         JSONObject jsonObject = httpRequest(url, "POST", jsonMenu);
-        System.out.println("jsonObject" + jsonObject);
         if (null != jsonObject) {
             if (0 != jsonObject.getInteger("errcode")) {
                 result = jsonObject.getInteger("errcode");
@@ -209,6 +209,32 @@ public class WeixinUtil {
         }
 
         return result;
+    }
+
+    /**
+     * 创建永久二维码
+     *
+     * @param qrCode      二维码实例
+     * @param accessToken 有效的access_token
+     */
+    public static QrCodeInfo createQrCode(QrCode qrCode, String accessToken) {
+        QrCodeInfo qrCodeInfo = null;
+
+        // 拼装创建菜单的url
+        String url = generate_qr_code.replace("ACCESS_TOKEN", accessToken);
+        // 将菜单对象转换成json字符串
+        String jsonQrCode = JSONObject.toJSON(qrCode).toString();
+        // 调用接口创建菜单
+        JSONObject jsonObject = httpRequest(url, "POST", jsonQrCode);
+        if (null != jsonObject) {
+            try {
+                qrCodeInfo = JSONObject.toJavaObject(jsonObject, QrCodeInfo.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("创建永久二维码失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return qrCodeInfo;
     }
 
 

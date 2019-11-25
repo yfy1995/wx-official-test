@@ -24,12 +24,11 @@ public class TemplateManager {
         // 第三方用户唯一凭证密钥
         String appSecret = "fa132a5549b1ca9dc92081e752d12340";
         // accessToken （通过接口获取获取access_token每日限制2000次）
-        String accessToken = "27_ri52KzmQi1x9gwiH41IrWlwePlY_HSf0n6EkGenGGNl-4oql2S2jroPk9YVGXjohxGvmgGcj_Qgix_fBlwF9V9Gh2-jOE8KJJ_RqJ7G25fm1PDVrwM7AEIMb_swjhCLSPr9Pdqn76At9t0UVYBUgABAQTM";
 
         // 调用接口获取access_token
-//        AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
+        AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
 
-//        System.out.println(at.getAccessToken());
+        System.out.println(at.getAccessToken());
 
 //        setBelongIndustry(getIndustry(), at);
 

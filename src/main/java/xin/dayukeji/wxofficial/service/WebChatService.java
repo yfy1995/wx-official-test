@@ -233,6 +233,7 @@ public class WebChatService {
             user = new User();
             user.setOpenId(openId);
             UserInfo userInfo = WeixinUtil.getUserInfo(accessToken, openId);
+            logger.info("userInfo:" + userInfo);
             if (userInfo != null) {
                 packUser(user, userInfo);
                 userRepository.save(user);
