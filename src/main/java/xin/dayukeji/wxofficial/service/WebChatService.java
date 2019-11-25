@@ -6,9 +6,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xin.dayukeji.wxofficial.WxOfficialEnv;
 import xin.dayukeji.wxofficial.entity.pojo.User;
 import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
+import xin.dayukeji.wxofficial.entity.wechat.WebAccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
 import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
 import xin.dayukeji.wxofficial.entity.wechat.output.TextMessage;
@@ -36,6 +38,8 @@ public class WebChatService {
     private static Logger logger = LoggerFactory.getLogger(WebChatService.class);
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private WxOfficialEnv wxOfficialEnv;
 
     /**
      * 处理微信发来的请求 map 消息业务处理分发
@@ -241,12 +245,11 @@ public class WebChatService {
             user = new User();
             user.setOpenId(openId);
             UserInfo userInfo = WeixinUtil.getUserInfo(accessToken.getAccessToken(), openId);
-            logger.info("userInfo:" + userInfo);
-            if (userInfo.getSubscribe_time() != null) {
-                packUser(user, userInfo);
-                userRepository.save(user);
-                logger.info("新用户注册===openId:" + openId);
-            }
+
+            packUser(user, userInfo);
+            userRepository.save(user);
+            logger.info("新用户注册===openId:" + openId);
+
         }
     }
 
@@ -260,5 +263,17 @@ public class WebChatService {
         BeanUtils.copyProperties(userInfo, user, User.class);
         user.setSubscribeTime(new Timestamp(userInfo.getSubscribe_time() * 1000));
         user.setAvatar(userInfo.getHeadimgurl());
+    }
+
+    /**
+     * 通过网页授权登录
+     *
+     * @param code
+     */
+    public void registerByWeb(String code) {
+        WebAccessToken webAccessToken = WeixinUtil.getWebAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret(), code);
+        if (webAccessToken.getOpenid() != null) {
+            register(webAccessToken.getOpenid());
+        }
     }
 }

@@ -42,6 +42,11 @@ public class WeixinUtil {
      */
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
     /**
+     * 获取web_access_token的接口地址（GET）
+     */
+    public final static String web_access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=APPSECRET&code=CODE&grant_type=authorization_code";
+
+    /**
      * 菜单创建（POST）
      */
     public static String menu_create_url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
@@ -263,6 +268,31 @@ public class WeixinUtil {
             }
         }
         return accessToken;
+    }
+
+    /**
+     * 获取web_access_token
+     *
+     * @param appid     凭证
+     * @param appsecret 密钥
+     * @param code      票据
+     * @return
+     */
+    public static WebAccessToken getWebAccessToken(String appid, String appsecret, String code) {
+        WebAccessToken webAccessToken = null;
+
+        String requestUrl = web_access_token_url.replace("APPID", appid).replace("APPSECRET", appsecret).replace("CODE", code);
+        JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                webAccessToken = JSONObject.toJavaObject(jsonObject, WebAccessToken.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取web_access_token失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return webAccessToken;
     }
 
 

@@ -45,6 +45,20 @@ env-config:
   # ** 需要做session的 ** #
   intercept-list:
     /**
-  user-appid: wx2ac4ab52eaf76dd7
-  user-secret: e3be166429b357d2fef4940801a9fa85
+  user-appid: wx33e5389d1a2cde19
+  user-secret: fa132a5549b1ca9dc92081e752d12340
+  access-Url: https://tst.dayukeji.xin/mptest/api/auth/login
   wallet-ip: 60.205.186.191
+third-service:
+  tencent:
+    wechat-pay:
+      mch-id: 1509794011
+      secret: apSP6c674e04cde71M8lF966c01e876a
+      notify-url: https://tst.dayukeji.xin/p19015/api/wechatEcho
+      refund-url: https://test.dayukeji.xin/p19015/api/common/wechatEcho
+      refund:
+        header:
+          https-secret-path: /usr/local/lib/wxmch/cert-dykj.p12
+    wechat-mini:
+      appid: wx33e5389d1a2cde19
+      secret: fa132a5549b1ca9dc92081e752d12340
