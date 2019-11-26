@@ -159,7 +159,7 @@ public class WeixinUtil {
      */
     public static int sendCustomMessage(CustomMessage customMessage, String accessToken) {
         try {
-            Thread.sleep(200);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
