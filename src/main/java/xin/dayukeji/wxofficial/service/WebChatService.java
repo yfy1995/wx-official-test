@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.dayukeji.wxofficial.WxOfficialEnv;
+import xin.dayukeji.wxofficial.constant.CustomMessageConstant;
 import xin.dayukeji.wxofficial.entity.pojo.User;
 import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfoByWeb;
 import xin.dayukeji.wxofficial.entity.wechat.WebAccessToken;
+import xin.dayukeji.wxofficial.entity.wechat.message.TextCustomMessage;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
 import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
 import xin.dayukeji.wxofficial.entity.wechat.output.TextMessage;
@@ -161,6 +163,15 @@ public class WebChatService {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
+
+                //发送客服消息
+                TextCustomMessage customMessage = new TextCustomMessage();
+                customMessage.setTouser(fromUserName);
+                customMessage.setMsgtype(CustomMessageConstant.TEXT);
+                TextCustomMessage.Text text = new TextCustomMessage.Text();
+                text.setContent("再次谢谢～～～·");
+                customMessage.setText(text);
+                WeixinUtil.sendCustomMessage(customMessage, WeixinUtil.getAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret()).getAccessToken());
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
