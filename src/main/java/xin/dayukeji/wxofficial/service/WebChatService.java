@@ -10,6 +10,7 @@ import xin.dayukeji.wxofficial.WxOfficialEnv;
 import xin.dayukeji.wxofficial.entity.pojo.User;
 import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
+import xin.dayukeji.wxofficial.entity.wechat.UserInfoByWeb;
 import xin.dayukeji.wxofficial.entity.wechat.WebAccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
 import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
@@ -160,8 +161,6 @@ public class WebChatService {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
-
-                int i=1/0;
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
@@ -237,11 +236,7 @@ public class WebChatService {
      * @param openId
      */
     public void register(String openId) {
-        // 第三方用户唯一凭证
-        String appId = "wx33e5389d1a2cde19";
-        // 第三方用户唯一凭证密钥
-        String appSecret = "fa132a5549b1ca9dc92081e752d12340";
-        AccessToken accessToken = WeixinUtil.getAccessToken(appId, appSecret);
+        AccessToken accessToken = WeixinUtil.getAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret());
         User user = userRepository.findByOpenId(openId);
         if (user == null) {
             user = new User();
@@ -253,6 +248,37 @@ public class WebChatService {
             logger.info("新用户注册===openId:" + openId);
 
         }
+    }
+
+    /**
+     * 注册用户(web)
+     *
+     * @param openId
+     */
+    private void registerByWeb(String openId) {
+        AccessToken accessToken = WeixinUtil.getAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret());
+        User user = userRepository.findByOpenId(openId);
+        if (user == null) {
+            user = new User();
+            user.setOpenId(openId);
+            UserInfoByWeb userInfo = WeixinUtil.getUserInfoByWeb(accessToken.getAccessToken(), openId);
+
+            packWebUser(user, userInfo);
+            userRepository.save(user);
+            logger.info("新用户注册(web端)===openId:" + openId);
+
+        }
+    }
+
+    /**
+     * 封装web端用户信息
+     *
+     * @param user
+     * @param userInfo
+     */
+    private void packWebUser(User user, UserInfoByWeb userInfo) {
+        BeanUtils.copyProperties(userInfo, user, User.class);
+        user.setAvatar(userInfo.getHeadimgurl());
     }
 
     /**
@@ -272,10 +298,10 @@ public class WebChatService {
      *
      * @param code
      */
-    public void registerByWeb(String code) {
+    public void loginByWeb(String code) {
         WebAccessToken webAccessToken = WeixinUtil.getWebAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret(), code);
         if (webAccessToken.getOpenid() != null) {
-            register(webAccessToken.getOpenid());
+            registerByWeb(webAccessToken.getOpenid());
         }
     }
 }

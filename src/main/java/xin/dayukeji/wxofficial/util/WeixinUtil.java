@@ -38,6 +38,10 @@ public class WeixinUtil {
      */
     public static String get_user_info = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
     /**
+     * 获取web端用户信息（GET）
+     */
+    public static String get_web_user_info = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+    /**
      * 获取access_token的接口地址（GET）
      */
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
@@ -92,6 +96,29 @@ public class WeixinUtil {
             }
         }
         return userInfo;
+    }
+
+
+    /**
+     * 获取用户信息(web端)
+     *
+     * @param accessToken 有效的access_token
+     * @return
+     */
+    public static UserInfoByWeb getUserInfoByWeb(String accessToken, String openId) {
+        UserInfoByWeb userInfoByWeb = new UserInfoByWeb();
+        String url = get_web_user_info.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+        JSONObject jsonObject = httpRequest(url, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                userInfoByWeb = JSONObject.toJavaObject(jsonObject, UserInfoByWeb.class);
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取web端用户信息失败 errcode:{} errmsg:{}", jsonObject.getInteger("errcode"), jsonObject.getString("errmsg"));
+            }
+        }
+        return userInfoByWeb;
     }
 
     /**

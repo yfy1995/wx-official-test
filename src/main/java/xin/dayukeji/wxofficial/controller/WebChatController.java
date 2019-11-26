@@ -99,7 +99,6 @@ public class WebChatController {
             //返回封装的xml
             response.getWriter().write(xml);
         } catch (Exception ex) {
-            logger.info("走了异常》》》" + ex);
             response.getWriter().write("");
         }
     }

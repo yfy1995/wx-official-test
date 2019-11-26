@@ -70,7 +70,7 @@ public class AuthController {
          */
         try {
             response.setCharacterEncoding("UTF-8");
-            webChatService.registerByWeb(code);
+            webChatService.loginByWeb(code);
 
             response.getWriter().write("");
         } catch (Exception ex) {
