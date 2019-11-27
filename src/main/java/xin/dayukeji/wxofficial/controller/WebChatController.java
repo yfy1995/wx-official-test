@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xin.dayukeji.common.annotation.ExcludeInterceptor;
 import xin.dayukeji.wxofficial.service.WebChatService;
 import xin.dayukeji.wxofficial.util.MessageType;
 import xin.dayukeji.wxofficial.util.WebChatUtil;
@@ -38,6 +39,7 @@ public class WebChatController {
      * @throws IOException
      */
     @GetMapping
+    @ExcludeInterceptor
     public void get(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //消息来源可靠性验证
         // 微信加密签名
@@ -59,6 +61,7 @@ public class WebChatController {
 
 
     @PostMapping
+    @ExcludeInterceptor
     public void post(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("微信调用post请求");
 
