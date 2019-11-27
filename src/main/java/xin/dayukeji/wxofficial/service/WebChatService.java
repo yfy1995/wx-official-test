@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.dayukeji.wxofficial.WxOfficialEnv;
-import xin.dayukeji.wxofficial.constant.CustomMessageConstant;
 import xin.dayukeji.wxofficial.entity.pojo.User;
 import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfo;
 import xin.dayukeji.wxofficial.entity.wechat.UserInfoByWeb;
 import xin.dayukeji.wxofficial.entity.wechat.WebAccessToken;
-import xin.dayukeji.wxofficial.entity.wechat.message.TextCustomMessage;
 import xin.dayukeji.wxofficial.entity.wechat.output.Articles;
 import xin.dayukeji.wxofficial.entity.wechat.output.NewsOutputMessage;
 import xin.dayukeji.wxofficial.entity.wechat.output.TextMessage;
@@ -43,6 +41,8 @@ public class WebChatService {
     private UserRepository userRepository;
     @Autowired
     private WxOfficialEnv wxOfficialEnv;
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 处理微信发来的请求 map 消息业务处理分发
@@ -163,6 +163,8 @@ public class WebChatService {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
+
+                cacheService.attentionAfterSendCustomMessage(fromUserName);
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注
