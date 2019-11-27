@@ -163,15 +163,6 @@ public class WebChatService {
                 replyMap.put("MsgType", MessageType.RESP_MESSAGE_TYPE_TEXT);
                 replyMap.put("Content", "谢谢你关注我～～～");
                 respXml = XmlUtil.xmlFormat(replyMap, true);
-
-                //发送客服消息
-                TextCustomMessage customMessage = new TextCustomMessage();
-                customMessage.setTouser(fromUserName);
-                customMessage.setMsgtype(CustomMessageConstant.TEXT);
-                TextCustomMessage.Text text = new TextCustomMessage.Text();
-                text.setContent("再次谢谢～～～·");
-                customMessage.setText(text);
-                WeixinUtil.sendCustomMessage(customMessage, WeixinUtil.getAccessToken(wxOfficialEnv.getUserAppid(), wxOfficialEnv.getUserSecret()).getAccessToken());
             }
             if (eventType.equals(MessageType.EVENT_TYPE_UNSUBSCRIBE)) {
                 // 取消关注

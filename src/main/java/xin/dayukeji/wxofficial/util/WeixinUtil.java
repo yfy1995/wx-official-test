@@ -158,11 +158,6 @@ public class WeixinUtil {
      * @return 0表示成功，其他值表示失败
      */
     public static int sendCustomMessage(CustomMessage customMessage, String accessToken) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int result = 0;
         // 拼装创建菜单的url
         String url = SEND_CUSTOM_MESSAGE.replace("ACCESS_TOKEN", accessToken);
