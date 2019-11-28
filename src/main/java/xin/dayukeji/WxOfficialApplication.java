@@ -43,6 +43,11 @@ public class WxOfficialApplication {
         Env.ctx = springApplication.run(args);
     }
 
+    @Bean
+    public MessageListener messageListener() {
+        return new TopicMessageListener();
+    }
+
     /**
      * Redis消息监听器容器
      * 这个容器加载了RedisConnectionFactory和消息监听器
