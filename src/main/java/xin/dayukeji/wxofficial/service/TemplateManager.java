@@ -3,10 +3,7 @@ package xin.dayukeji.wxofficial.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xin.dayukeji.wxofficial.entity.wechat.AccessToken;
-import xin.dayukeji.wxofficial.entity.wechat.template.Industry;
-import xin.dayukeji.wxofficial.entity.wechat.template.TemplateMessage;
-import xin.dayukeji.wxofficial.entity.wechat.template.TemplateVariable;
-import xin.dayukeji.wxofficial.entity.wechat.template.TestTemplateMessage;
+import xin.dayukeji.wxofficial.entity.wechat.template.*;
 import xin.dayukeji.wxofficial.util.WeixinUtil;
 
 /**
@@ -40,7 +37,7 @@ public class TemplateManager {
 //            System.out.println(entity);
 //        }
 
-//        WeixinUtil.sendTemplateMessage(getTemplateMessage(), at.getAccessToken());
+        WeixinUtil.sendTemplateMessage(getTemplateMessage2(), at.getAccessToken());
 
     }
 
@@ -100,6 +97,38 @@ public class TemplateManager {
         time.setColor("#173177");
         time.setValue("2019年5月20日");
         testTemplateMessage.setTime(time);
+        message.setData(testTemplateMessage);
+
+        return message;
+    }
+
+    /**
+     * 组装模板消息数据
+     *
+     * @return
+     */
+    private static TemplateMessage getTemplateMessage2() {
+        TemplateMessage message = new TemplateMessage();
+        message.setTouser("o-LH3wuM1m07GrivgnqXmB3kU3Lc");
+        message.setTemplate_id("YnaD8NyEelagUV_BAx3czUyjJ6M5FqILM--G5wqi9bQ");
+        message.setUrl("www.baidu.com");
+        Test2TemplateMessage testTemplateMessage = new Test2TemplateMessage();
+        TemplateVariable name = new TemplateVariable();
+        name.setColor("#173177");
+        name.setValue("王宁");
+        testTemplateMessage.setName(name);
+        TemplateVariable department = new TemplateVariable();
+        department.setColor("#173177");
+        department.setValue("中医药");
+        testTemplateMessage.setDepartment(department);
+        TemplateVariable hosipital = new TemplateVariable();
+        hosipital.setColor("#173177");
+        hosipital.setValue("平安正阳中医互联网医院");
+        testTemplateMessage.setHosipital(hosipital);
+        TemplateVariable remark = new TemplateVariable();
+        remark.setColor("#173177");
+        remark.setValue("请尽快确认病历信息");
+        testTemplateMessage.setRemark(remark);
         message.setData(testTemplateMessage);
 
         return message;
